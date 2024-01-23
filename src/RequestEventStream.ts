@@ -17,11 +17,12 @@ export async function postEventStream(prompt: string, msgCallback: (data: string
     var uri = "";
     var body = {};
     if ("CPU with llama.cpp" == modelEnv) {
-        uri = "/completion"
+        uri = "/chat/completions"
         body = {
-            "prompt": "|<end>|" + prompt, "n_predict": maxtokens, 
-            "temperature": 0.8, "repetition_penalty": 1.2, "top_k":40,  "top_p":0.95, "stream": true, 
-            "stop": ["|<end>|", "|end|", "<|endoftext|>", "## human"]
+            "messages":[{"role":"user","content":prompt}],
+            "model":"local-model",            
+            "temperature": 0.8,
+            "stream":true
         };
     }
     if ("GPU with TGI toolkit" == modelEnv) {

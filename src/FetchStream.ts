@@ -42,6 +42,7 @@ export class FetchStream {
         }
       }).then(async (readableStream) => {
         for await (const chunk of readableStream) {
+          console.log(chunk.toString());
           parser.feed(chunk.toString());
         }
       }).then(() => {
