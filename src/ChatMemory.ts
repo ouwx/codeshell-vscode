@@ -14,17 +14,18 @@ export class ChatMessage {
 }
 
 export class HumanMessage extends ChatMessage {
-    prefix = "## human:";
+    //prefix = "## human:";
+    prefix = "";
 }
 
 export class AIMessage extends ChatMessage {
-    prefix = "## assistant:";
+    //prefix = "## assistant:";
 
     append(text: string) {
         this.content += text;
-        this.content = this.content.replace("|end|", "");
-        this.content = this.content.replace("|<end>|", "");
-        this.content = this.content.replace("<|endoftext|>", "");
+        //this.content = this.content.replace("|end|", "");
+        //this.content = this.content.replace("|<end>|", "");
+        //this.content = this.content.replace("<|endoftext|>", "");
     }
 }
 
@@ -38,7 +39,8 @@ export class ChatItem {
     }
 
     toString(): string {
-        return `${this.humanMessage.toString()}|<end>|${this.aiMessage.toString()}`;
+        //return `${this.humanMessage.toString()}|<end>|${this.aiMessage.toString()}`;
+        return `${this.humanMessage.toString()}`;
     }
 }
 
@@ -73,9 +75,9 @@ export class SessionItem {
                 history += "\n";
             }
             history += chatItem.toString();
-            if (i < end) {
-                history += "|<end>|";
-            }
+            //if (i < end) {
+            //    history += "|<end>|";
+            //}
         }
         return history;
     }

@@ -14,20 +14,21 @@ export async function postCompletion(fimPrefixCode: string, fimSuffixCode: strin
     const modelEnv = workspace.getConfiguration("CodeShell").get("RunEnvForLLMs") as string;
     if ("CPU with llama.cpp" == modelEnv) {
         let data = {
-            "input_prefix": fimPrefixCode, "input_suffix": fimSuffixCode,
-            "n_predict": maxtokens, "temperature": 0.2, "repetition_penalty": 1.0, "top_k": 10, "top_p": 0.95,
+            "messages":[{"role":"user","content":fimPrefixCode}],
+            "model":"local-model",            
+            "temperature": 0.8,
             "stop": ["|<end>|", "|end|", "<|endoftext|>", "## human"]
         };
         console.debug("request.data:", data)
-        const response = await axiosInstance.post(serverAddress + "/completions", data);
+        let response = await axiosInstance.post(serverAddress + "/chat/completions", data);
         var content = "";
-        const respData = response.data as string;
-        const dataList = respData.split("\n\n");
-        for (var chunk of dataList) {
-            if (chunk.startsWith("data:")) {
-                content += JSON.parse(chunk.substring(5)).content
-            }
-        }
+        content = response.data.choices[0].message.content as string;
+        //const dataList = respData.split("\n\n");
+        //for (var chunk of dataList) {
+            //if (chunk.startsWith("data:")) {
+        //    content += JSON.parse(chunk.substring(5)).content
+            //}
+        //}
         console.debug("response.data:", content)
         return content.replace("<|endoftext|>", "");
     }
